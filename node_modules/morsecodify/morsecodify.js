@@ -80,7 +80,6 @@ module.exports.codify = function(toneFreq, wpm, farnsworth, text, cb){
     var translated = '';
 
     for(var i = 0; i < text.length; i++){
-        console.log(translated);
         if(text[i] == ' '){
             morseText = morseText.concat(wordSpace);
             translated += text[i];

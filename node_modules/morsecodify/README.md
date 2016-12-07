@@ -25,24 +25,3 @@ morse.codify(toneFreq, wpm, farnsworth, inputText, function(err, codeBuffer){
     }
 });
 ```
-
-# morsecmd
-
-## Usage
-    
-    node morsecmd -s 10 -t 800 -i 'Testing 1 2 3' -o ./morse.wav
-
-## Options
-
-    --sidetone -t  Sets the tone frequency. Default is 800
-    --wpm -s       Sets the speed in wpm. Default is 10
-    --input -i     Sets the input text to convert to morse code
-    --output -o    Sets the output file (must be a .wav file)
-
-You can also pipe from STDIN and to STDOUT with morsecmd.
-
-    echo 'Hello world' | morsecmd > hello.wav
-
-# morsenews
-
-Morsenews takes an RSS feed and creates a WAV file for each headline (title) in the feed. It also creates an M3U playlist containing all of the generated audio files.
