@@ -1,0 +1,20 @@
+{
+  "name": "morsecmd",
+  "version": "0.0.1",
+  "description": "A command line tool that translates text to morse code in a wav file",
+  "main": "morsecmd",
+  "dependencies": {
+    "command-line-args": "^3.0.4",
+    "morsecodify": "0.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paul Burton",
+  "license": "ISC",
+  "repository": {
+     "type": "git",
+     "url": "https://github.com/paulburton0/morsecmd.git"
+  } 
+}

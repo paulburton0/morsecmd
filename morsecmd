@@ -1,0 +1,86 @@
+#!/usr/bin/env node
+
+fs = require('fs');
+morse = require('morsecodify');
+const commandLineArgs = require('command-line-args');
+
+const optionDefinitions = [
+    { name: 'sidetone', alias: 't', type: Number, defaultValue: 800},
+    { name: 'wpm', alias: 's', type: Number, defaultValue: 18},
+    { name: 'farnsworth', alias: 'f', type: Number, defaultValue: 7},
+    { name: 'output', alias: 'o', type: String},
+    { name: 'input', alias: 'i', type: String},
+    { name: 'help', alias: 'h', type: Boolean},
+    { name: 'show', alias: 'r', type: Boolean}
+];
+
+const options = commandLineArgs(optionDefinitions);
+
+function showHelp(){
+    console.log('Usage: node index.js -s 10 -t 800 -i \'Testing 1 2 3\' -o ./morse.wav');
+    console.log('\nOptions');
+    console.log('--sidetone -t     Sets the tone frequency. Default is 800.');
+    console.log('--wpm -s          Sets the speed in wpm. Default is 18.');
+    console.log('--farnsworth -f   Sets the Farnsworth timing (space between characters and words) in wpm. Default is 10.');
+    console.log('--input -i        Sets the input text to convert to morse code.');
+    console.log('--output -o       Sets the output file (must be a .wav file)');
+    console.log('--show -r   Shows the translated text');
+    process.exit();
+}
+
+if(options.help) showhelp();
+
+var input;
+
+if(options.input) {
+    input = options.input;
+	morse.codify(options.sidetone, options.wpm, options.farnsworth, input, function(err, codeBuffer, translated){
+        if(err){
+            console.error(err);
+            process.exit();
+        }
+
+        if(options.show){
+            console.log(translated);
+        }
+
+		if(!options.output){ 
+			process.stdout.write(codeBuffer);
+	   } else {
+			var file = fs.createWriteStream(options.output);
+			file.write(codeBuffer);
+			file.end();
+	   }
+	});
+}
+else{
+  input = '';
+  process.stdin.setEncoding('utf8');
+  process.stdin.on('readable', function() {
+    var chunk;
+    while (chunk = process.stdin.read()) {
+      input+= chunk;
+    }
+    if(!input){
+        console.error('No input text was provided.');
+        process.exit();
+    }
+  });
+  process.stdin.on('end', function () {
+    // There will be a trailing \n from the user hitting enter. Get rid of it.
+	morse.codify(options.sidetone, options.wpm, options.farnsworth, input, function(err, codeBuffer, translated){
+        if(err){
+            console.error(err);
+            process.exit();
+        }
+
+		if(!options.output){ 
+			process.stdout.write(codeBuffer);
+	   } else {
+			var file = fs.createWriteStream(options.output);
+			file.write(codeBuffer);
+			file.end();
+	   }
+	});
+  });
+}
