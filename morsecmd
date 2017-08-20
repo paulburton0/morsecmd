@@ -28,7 +28,7 @@ function showHelp(){
     process.exit();
 }
 
-if(options.help) showhelp();
+if(options.help) showHelp();
 
 var input;
 
