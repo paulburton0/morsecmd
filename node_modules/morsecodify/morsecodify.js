@@ -2,11 +2,11 @@ var tone = require('tonegenerator');
 var header = require('waveheader');
 var latinize = require('latinize');
 
-module.exports.codify = function(toneFreq, wpm, farnsworth, intext, cb){
-    if(!intext){
+module.exports.codify = function(toneFreq, wpm, farnsworth, text, cb){
+    if(!text){
         return cb('No input text was provided.');
     }
-    var text = latinize(intext);
+    var text = latinize(text);
     var samples = 44100; 
     var volume = 30;
     var text = text.split('');
@@ -28,6 +28,17 @@ module.exports.codify = function(toneFreq, wpm, farnsworth, intext, cb){
 
     var charSpace = new Array(Math.ceil(samples * charSpaceDuration)).fill(0);
     var wordSpace = new Array(Math.ceil(samples * wordSpaceDuration)).fill(0);
+
+    var excludeChars = new Array('@', '*', '(', ')', '"', '‘', '’', '\'');
+
+    // replaceChars permits you to add custom mapping of _single characters_ to other [optionally multi-character] strings.
+    // To add a new mapping, add a new pair like the examples below.
+    var replaceChars = new Array(
+                                 '$', 'USD', 
+                                 '%', ' pct', 
+                                 '&', 'es', 
+                                 '#', 'nr'
+                                 );
 
     var characters = {
         'a' : dit.concat(elementSpace, dah),
@@ -85,9 +96,23 @@ module.exports.codify = function(toneFreq, wpm, farnsworth, intext, cb){
         if(text[i] == ' '){
             morseText = morseText.concat(wordSpace);
             translated += text[i];
-        } else if(text[i] == '$' || text[i] == '\'' || text[i] == '\"' || text[i] == '‘' || text[i] == '’' || text[i] == '&'){
+        } else if(excludeChars.includes(text[i])){
+            if(text[i+1] == ' '){
+                i++;
+            }
             continue;
-        } else {
+        } else if(replaceChars.includes(text[i])){
+            replacement = replaceChars[replaceChars.indexOf(text[i])+1].split('');
+            for(var r =0; r < replacement.length; r++){
+                if(replacement[r] == ' '){
+                    morseText = morseText.concat(wordSpace);
+                    translated += replacement[r];
+                } else {
+                    morseText = morseText.concat(characters[replacement[r].toLowerCase()], charSpace);
+                    translated += replacement[r].toLowerCase();
+                }
+            }
+        }else {
             morseText = morseText.concat(characters[text[i].toLowerCase()], charSpace);
             translated += text[i].toLowerCase();
         }

@@ -24,7 +24,7 @@ function showHelp(){
     console.log('--farnsworth -f   Sets the Farnsworth timing (space between characters and words) in wpm. Default is 10.');
     console.log('--input -i        Sets the input text to convert to morse code.');
     console.log('--output -o       Sets the output file (must be a .wav file)');
-    console.log('--show -r   Shows the translated text');
+    console.log('--show -r         Shows the translated text');
     process.exit();
 }
 
@@ -39,11 +39,9 @@ if(options.input) {
             console.error(err);
             process.exit();
         }
-
         if(options.show){
             console.log(translated);
         }
-
 		if(!options.output){ 
 			process.stdout.write(codeBuffer);
 	   } else {
@@ -72,8 +70,6 @@ else{
             console.error(err);
             process.exit();
         }
-        
-
 		if(!options.output){ 
 			process.stdout.write(codeBuffer);
 	   } else {
