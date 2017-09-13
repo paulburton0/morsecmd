@@ -67,12 +67,12 @@ else{
     }
   });
   process.stdin.on('end', function () {
-    // There will be a trailing \n from the user hitting enter. Get rid of it.
 	morse.codify(options.sidetone, options.wpm, options.farnsworth, input, function(err, codeBuffer, translated){
         if(err){
             console.error(err);
             process.exit();
         }
+        
 
 		if(!options.output){ 
 			process.stdout.write(codeBuffer);
