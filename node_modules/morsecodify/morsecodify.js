@@ -83,7 +83,7 @@ module.exports.codify = function(toneFreq, wpm, farnsworth, text, cb){
         if(text[i] == ' '){
             morseText = morseText.concat(wordSpace);
             translated += text[i];
-        } else if(text[i] == '$' || text[i] == '\'' || text[i] == '\"' || text[i] == '‘' || text[i] == '’'){
+        } else if(text[i] == '$' || text[i] == '\'' || text[i] == '\"' || text[i] == '‘' || text[i] == '’' || text[i] == '&'){
             continue;
         } else {
             morseText = morseText.concat(characters[text[i].toLowerCase()], charSpace);
