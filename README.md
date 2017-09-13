@@ -11,6 +11,6 @@
     --input -i     Sets the input text to convert to morse code
     --output -o    Sets the output file (must be a .wav file)
 
-You can also pipe from STDIN and to STDOUT with morsecmd.
+You can also pipe and/or redirect from STDIN and to STDOUT with morsecmd.
 
     echo 'Hello world' | morsecmd > hello.wav
