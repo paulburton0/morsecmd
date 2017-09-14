@@ -17,7 +17,7 @@ const optionDefinitions = [
 const options = commandLineArgs(optionDefinitions);
 
 function showHelp(){
-    console.log('Usage: node index.js -s 10 -t 800 -i \'Testing 1 2 3\' -o ./morse.wav');
+    console.log('Usage: node morsecmd -s 10 -t 800 -i \'Testing 1 2 3\' -o ./morse.wav');
     console.log('\nOptions');
     console.log('--sidetone -t     Sets the tone frequency. Default is 800.');
     console.log('--wpm -s          Sets the speed in wpm. Default is 18.');
@@ -69,6 +69,9 @@ else{
         if(err){
             console.error(err);
             process.exit();
+        }
+        if(options.show){
+            console.log(translated);
         }
 		if(!options.output){ 
 			process.stdout.write(codeBuffer);
