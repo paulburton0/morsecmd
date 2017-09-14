@@ -7,9 +7,9 @@ module.exports.codify = function(toneFreq, wpm, farnsworth, text, cb){
         return cb('No input text was provided.');
     }
     var text = latinize(text);
+    var text = text.replace(/(\r\n|\n|\r)/gm,"");
     var samples = 44100; 
     var volume = 30;
-    var text = text.split('');
     var ditDuration = (1200/wpm)/1000;
     var dahDuration = 3 * ditDuration;
     var charSpaceDuration = 3 * ditDuration;
@@ -19,6 +19,19 @@ module.exports.codify = function(toneFreq, wpm, farnsworth, text, cb){
     var elementSpace = new Array(Math.ceil(samples * ditDuration)).fill(0);
     var charSpaceDuration;
     var wordSpaceDuration;
+    // excludeChars permits you to completely eliminate characters from the morse output.
+    var excludeChars = new Array('@', '*', '(', ')', '"', '‘', '’', '\'');
+
+    // replaceChars permits you to add custom mapping of words in the source text to replacement strings.
+    // To add a new mapping, add a new pair like the examples below. Note the use of spaces in both
+    // strings to replace and replacement strings.
+    var replaceChars = new Array(
+                                 ' $', ' usd ', 
+                                 '% ', ' pct ', 
+                                 ' & ', ' es ', 
+                                 ' # ', ' nr ',
+                                 ' and ', ' es '
+                                 );
 
     if(farnsworth){
         fDitDuration = (1200/farnsworth)/1000;
@@ -29,17 +42,11 @@ module.exports.codify = function(toneFreq, wpm, farnsworth, text, cb){
     var charSpace = new Array(Math.ceil(samples * charSpaceDuration)).fill(0);
     var wordSpace = new Array(Math.ceil(samples * wordSpaceDuration)).fill(0);
 
-    var excludeChars = new Array('@', '*', '(', ')', '"', '‘', '’', '\'');
-
-    // replaceChars permits you to add custom mapping of _single characters_ to other [optionally multi-character] strings.
-    // To add a new mapping, add a new pair like the examples below.
-    var replaceChars = new Array(
-                                 '$', 'USD', 
-                                 '%', ' pct', 
-                                 '&', 'es', 
-                                 '#', 'nr'
-                                 );
-
+    for(var r=0; r<replaceChars.length; r+=2){
+        var re = new RegExp(replaceChars[r], "gi");
+        text = text.replace(re, replaceChars[r+1]); 
+    }
+    var text = text.split('');
     var characters = {
         'a' : dit.concat(elementSpace, dah),
         'b' : dah.concat(elementSpace, dit, elementSpace, dit, elementSpace, dit),
@@ -101,17 +108,6 @@ module.exports.codify = function(toneFreq, wpm, farnsworth, text, cb){
                 i++;
             }
             continue;
-        } else if(replaceChars.includes(text[i])){
-            replacement = replaceChars[replaceChars.indexOf(text[i])+1].split('');
-            for(var r =0; r < replacement.length; r++){
-                if(replacement[r] == ' '){
-                    morseText = morseText.concat(wordSpace);
-                    translated += replacement[r];
-                } else {
-                    morseText = morseText.concat(characters[replacement[r].toLowerCase()], charSpace);
-                    translated += replacement[r].toLowerCase();
-                }
-            }
         }else {
             morseText = morseText.concat(characters[text[i].toLowerCase()], charSpace);
             translated += text[i].toLowerCase();
