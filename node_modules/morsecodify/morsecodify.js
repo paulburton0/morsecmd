@@ -2,7 +2,7 @@ var tone = require('tonegenerator');
 var header = require('waveheader');
 var latinize = require('latinize');
 
-module.exports.codify = function(toneFreq, wpm, farnsworth, text, cb){
+module.exports.codify = function(toneFreq, wpm, farnsworth, text, replaceChars, cb){
     if(!text){
         return cb('No input text was provided.');
     }
@@ -25,13 +25,13 @@ module.exports.codify = function(toneFreq, wpm, farnsworth, text, cb){
     // replaceChars permits you to add custom mapping of words in the source text to replacement strings.
     // To add a new mapping, add a new pair like the examples below. Note the use of spaces in both
     // strings to replace and replacement strings.
-    var replaceChars = new Array(
-                                 ' $', ' usd ', 
-                                 '% ', ' pct ', 
-                                 ' & ', ' es ', 
-                                 ' # ', ' nr ',
-                                 ' and ', ' es '
-                                 );
+    //var replaceChars = new Array(
+                                 //' $', ' usd ', 
+                                 //'% ', ' pct ', 
+                                 //' & ', ' es ', 
+                                 //' # ', ' nr ',
+                                 //' and ', ' es '
+                                 //);
 
     if(farnsworth){
         fDitDuration = (1200/farnsworth)/1000;

@@ -2,6 +2,15 @@
 
 fs = require('fs');
 morse = require('morsecodify');
+
+var replaceChars = new Array(
+                             ' $', ' usd ', 
+                             '% ', ' pct ', 
+                             ' & ', ' es ', 
+                             ' # ', ' nr ',
+                             ' and ', ' es '
+                             );
+
 const commandLineArgs = require('command-line-args');
 
 const optionDefinitions = [
@@ -28,19 +37,22 @@ function showHelp(){
     process.exit();
 }
 
-if(options.help) showHelp();
+if(options.help){
+    showHelp();
+    process.exit();
+}
 
 var input;
 
 if(options.input) {
     input = options.input;
-	morse.codify(options.sidetone, options.wpm, options.farnsworth, input, function(err, codeBuffer, translated){
+	morse.codify(options.sidetone, options.wpm, options.farnsworth, input, replaceChars, function(err, codeBuffer, translated){
         if(err){
             console.error(err);
             process.exit();
         }
         if(options.show){
-            console.log(translated);
+            console.error(translated);
         }
 		if(!options.output){ 
 			process.stdout.write(codeBuffer);
@@ -61,17 +73,18 @@ else{
     }
     if(!input){
         console.error('No input text was provided.');
+        console.error(showHelp());
         process.exit();
     }
   });
   process.stdin.on('end', function () {
-	morse.codify(options.sidetone, options.wpm, options.farnsworth, input, function(err, codeBuffer, translated){
+	morse.codify(options.sidetone, options.wpm, options.farnsworth, input, replaceChars, function(err, codeBuffer, translated){
         if(err){
             console.error(err);
             process.exit();
         }
         if(options.show){
-            console.log(translated);
+            console.error(translated);
         }
 		if(!options.output){ 
 			process.stdout.write(codeBuffer);
