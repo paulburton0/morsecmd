@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "A command line tool that translates text to morse code in a wav file",
   "main": "morsecmd",
+  "bin": "./morsecmd",
   "dependencies": {
     "command-line-args": "^3.0.4",
     "morsecodify": "^1.0.1"
