@@ -5,7 +5,7 @@
   "main": "morsecmd",
   "dependencies": {
     "command-line-args": "^3.0.4",
-    "morsecodify": "^1.0.0"
+    "morsecodify": "^1.0.1"
   },
   "devDependencies": {},
   "scripts": {
